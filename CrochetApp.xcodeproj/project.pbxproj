@@ -1,0 +1,737 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		230209D02D657F9E00075743 /* PatternLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209CF2D657F9E00075743 /* PatternLibraryViewController.swift */; };
+		230209D82D6582FB00075743 /* PatternDatabase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 230209D62D6582FB00075743 /* PatternDatabase.xcdatamodeld */; };
+		230209DB2D65885B00075743 /* PatternCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209DA2D65885B00075743 /* PatternCell.swift */; };
+		233560D82D6387CE00AC9199 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560D72D6387CE00AC9199 /* AppDelegate.swift */; };
+		233560DA2D6387CE00AC9199 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560D92D6387CE00AC9199 /* SceneDelegate.swift */; };
+		233560DC2D6387CE00AC9199 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560DB2D6387CE00AC9199 /* ViewController.swift */; };
+		233560DF2D6387CE00AC9199 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 233560DE2D6387CE00AC9199 /* Base */; };
+		233560E12D6387D000AC9199 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 233560E02D6387D000AC9199 /* Assets.xcassets */; };
+		233560E42D6387D000AC9199 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 233560E32D6387D000AC9199 /* Base */; };
+		233560EF2D6387D100AC9199 /* CrochetAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560EE2D6387D100AC9199 /* CrochetAppTests.swift */; };
+		233560F92D6387D100AC9199 /* CrochetAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560F82D6387D100AC9199 /* CrochetAppUITests.swift */; };
+		233560FB2D6387D100AC9199 /* CrochetAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560FA2D6387D100AC9199 /* CrochetAppUITestsLaunchTests.swift */; };
+		233561082D6389E200AC9199 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233561072D6389E200AC9199 /* LoginViewController.swift */; };
+		2335610A2D638C5D00AC9199 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233561092D638C5D00AC9199 /* CreateAccountViewController.swift */; };
+		2335610C2D638E5100AC9199 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2335610B2D638E5100AC9199 /* GoogleService-Info.plist */; };
+		2335610F2D638FAD00AC9199 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2335610E2D638FAD00AC9199 /* FirebaseAnalytics */; };
+		233561112D638FAD00AC9199 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 233561102D638FAD00AC9199 /* FirebaseAuth */; };
+		233561132D638FAD00AC9199 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 233561122D638FAD00AC9199 /* FirebaseAuthCombine-Community */; };
+		233561152D638FAD00AC9199 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 233561142D638FAD00AC9199 /* FirebaseDatabase */; };
+		233561172D638FAD00AC9199 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 233561162D638FAD00AC9199 /* FirebaseStorage */; };
+		233561602D654DA700AC9199 /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2335615F2D654DA700AC9199 /* HomeScreenViewController.swift */; };
+		2386E5BB2D659C4A0022505F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2386E5BA2D659C4A0022505F /* GoogleService-Info.plist */; };
+		23F1F58B2D655094000B2004 /* DictionaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F1F58A2D655094000B2004 /* DictionaryViewController.swift */; };
+		23F1F58F2D655943000B2004 /* PatternDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F1F58E2D655943000B2004 /* PatternDetailViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		233560EB2D6387D100AC9199 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 233560CC2D6387CD00AC9199 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 233560D32D6387CE00AC9199;
+			remoteInfo = CrochetApp;
+		};
+		233560F52D6387D100AC9199 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 233560CC2D6387CD00AC9199 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 233560D32D6387CE00AC9199;
+			remoteInfo = CrochetApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		230209CF2D657F9E00075743 /* PatternLibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternLibraryViewController.swift; sourceTree = "<group>"; };
+		230209D72D6582FB00075743 /* PatternDatabase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PatternDatabase.xcdatamodel; sourceTree = "<group>"; };
+		230209DA2D65885B00075743 /* PatternCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternCell.swift; sourceTree = "<group>"; };
+		233560D42D6387CE00AC9199 /* CrochetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrochetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		233560D72D6387CE00AC9199 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		233560D92D6387CE00AC9199 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		233560DB2D6387CE00AC9199 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		233560DE2D6387CE00AC9199 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		233560E02D6387D000AC9199 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		233560E32D6387D000AC9199 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		233560EA2D6387D100AC9199 /* CrochetAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrochetAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		233560EE2D6387D100AC9199 /* CrochetAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrochetAppTests.swift; sourceTree = "<group>"; };
+		233560F42D6387D100AC9199 /* CrochetAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrochetAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		233560F82D6387D100AC9199 /* CrochetAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrochetAppUITests.swift; sourceTree = "<group>"; };
+		233560FA2D6387D100AC9199 /* CrochetAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrochetAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		233561072D6389E200AC9199 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		233561092D638C5D00AC9199 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
+		2335610B2D638E5100AC9199 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2335615C2D65471800AC9199 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2335615F2D654DA700AC9199 /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
+		2386E5B72D65986C0022505F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2386E5BA2D659C4A0022505F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		23F1F58A2D655094000B2004 /* DictionaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryViewController.swift; sourceTree = "<group>"; };
+		23F1F58E2D655943000B2004 /* PatternDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternDetailViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		233560D12D6387CE00AC9199 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2335610F2D638FAD00AC9199 /* FirebaseAnalytics in Frameworks */,
+				233561132D638FAD00AC9199 /* FirebaseAuthCombine-Community in Frameworks */,
+				233561152D638FAD00AC9199 /* FirebaseDatabase in Frameworks */,
+				233561172D638FAD00AC9199 /* FirebaseStorage in Frameworks */,
+				233561112D638FAD00AC9199 /* FirebaseAuth in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		233560E72D6387D100AC9199 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		233560F12D6387D100AC9199 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		230209D52D6581F200075743 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				230209CF2D657F9E00075743 /* PatternLibraryViewController.swift */,
+				233560DB2D6387CE00AC9199 /* ViewController.swift */,
+				23F1F58E2D655943000B2004 /* PatternDetailViewController.swift */,
+				233561092D638C5D00AC9199 /* CreateAccountViewController.swift */,
+				233561072D6389E200AC9199 /* LoginViewController.swift */,
+				2335615F2D654DA700AC9199 /* HomeScreenViewController.swift */,
+				23F1F58A2D655094000B2004 /* DictionaryViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		230209D92D6586E700075743 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		233560CB2D6387CD00AC9199 = {
+			isa = PBXGroup;
+			children = (
+				233560D62D6387CE00AC9199 /* CrochetApp */,
+				233560ED2D6387D100AC9199 /* CrochetAppTests */,
+				233560F72D6387D100AC9199 /* CrochetAppUITests */,
+				233560D52D6387CE00AC9199 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		233560D52D6387CE00AC9199 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				233560D42D6387CE00AC9199 /* CrochetApp.app */,
+				233560EA2D6387D100AC9199 /* CrochetAppTests.xctest */,
+				233560F42D6387D100AC9199 /* CrochetAppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		233560D62D6387CE00AC9199 /* CrochetApp */ = {
+			isa = PBXGroup;
+			children = (
+				2386E5BA2D659C4A0022505F /* GoogleService-Info.plist */,
+				2386E5B72D65986C0022505F /* Info.plist */,
+				230209D92D6586E700075743 /* View */,
+				230209D52D6581F200075743 /* Controller */,
+				233560D72D6387CE00AC9199 /* AppDelegate.swift */,
+				233560D92D6387CE00AC9199 /* SceneDelegate.swift */,
+				233560DD2D6387CE00AC9199 /* Main.storyboard */,
+				233560E02D6387D000AC9199 /* Assets.xcassets */,
+				233560E22D6387D000AC9199 /* LaunchScreen.storyboard */,
+				230209D62D6582FB00075743 /* PatternDatabase.xcdatamodeld */,
+				230209DA2D65885B00075743 /* PatternCell.swift */,
+			);
+			path = CrochetApp;
+			sourceTree = "<group>";
+		};
+		233560ED2D6387D100AC9199 /* CrochetAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				233560EE2D6387D100AC9199 /* CrochetAppTests.swift */,
+			);
+			path = CrochetAppTests;
+			sourceTree = "<group>";
+		};
+		233560F72D6387D100AC9199 /* CrochetAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2335615C2D65471800AC9199 /* GoogleService-Info.plist */,
+				233560F82D6387D100AC9199 /* CrochetAppUITests.swift */,
+				233560FA2D6387D100AC9199 /* CrochetAppUITestsLaunchTests.swift */,
+				2335610B2D638E5100AC9199 /* GoogleService-Info.plist */,
+			);
+			path = CrochetAppUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		233560D32D6387CE00AC9199 /* CrochetApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 233560FE2D6387D100AC9199 /* Build configuration list for PBXNativeTarget "CrochetApp" */;
+			buildPhases = (
+				233560D02D6387CE00AC9199 /* Sources */,
+				233560D12D6387CE00AC9199 /* Frameworks */,
+				233560D22D6387CE00AC9199 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CrochetApp;
+			packageProductDependencies = (
+				2335610E2D638FAD00AC9199 /* FirebaseAnalytics */,
+				233561102D638FAD00AC9199 /* FirebaseAuth */,
+				233561122D638FAD00AC9199 /* FirebaseAuthCombine-Community */,
+				233561142D638FAD00AC9199 /* FirebaseDatabase */,
+				233561162D638FAD00AC9199 /* FirebaseStorage */,
+			);
+			productName = CrochetApp;
+			productReference = 233560D42D6387CE00AC9199 /* CrochetApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		233560E92D6387D100AC9199 /* CrochetAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 233561012D6387D100AC9199 /* Build configuration list for PBXNativeTarget "CrochetAppTests" */;
+			buildPhases = (
+				233560E62D6387D100AC9199 /* Sources */,
+				233560E72D6387D100AC9199 /* Frameworks */,
+				233560E82D6387D100AC9199 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				233560EC2D6387D100AC9199 /* PBXTargetDependency */,
+			);
+			name = CrochetAppTests;
+			productName = CrochetAppTests;
+			productReference = 233560EA2D6387D100AC9199 /* CrochetAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		233560F32D6387D100AC9199 /* CrochetAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 233561042D6387D100AC9199 /* Build configuration list for PBXNativeTarget "CrochetAppUITests" */;
+			buildPhases = (
+				233560F02D6387D100AC9199 /* Sources */,
+				233560F12D6387D100AC9199 /* Frameworks */,
+				233560F22D6387D100AC9199 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				233560F62D6387D100AC9199 /* PBXTargetDependency */,
+			);
+			name = CrochetAppUITests;
+			productName = CrochetAppUITests;
+			productReference = 233560F42D6387D100AC9199 /* CrochetAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		233560CC2D6387CD00AC9199 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					233560D32D6387CE00AC9199 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					233560E92D6387D100AC9199 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 233560D32D6387CE00AC9199;
+					};
+					233560F32D6387D100AC9199 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 233560D32D6387CE00AC9199;
+					};
+				};
+			};
+			buildConfigurationList = 233560CF2D6387CD00AC9199 /* Build configuration list for PBXProject "CrochetApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 233560CB2D6387CD00AC9199;
+			packageReferences = (
+				2335610D2D638FAD00AC9199 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			productRefGroup = 233560D52D6387CE00AC9199 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				233560D32D6387CE00AC9199 /* CrochetApp */,
+				233560E92D6387D100AC9199 /* CrochetAppTests */,
+				233560F32D6387D100AC9199 /* CrochetAppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		233560D22D6387CE00AC9199 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				233560E12D6387D000AC9199 /* Assets.xcassets in Resources */,
+				2386E5BB2D659C4A0022505F /* GoogleService-Info.plist in Resources */,
+				233560E42D6387D000AC9199 /* Base in Resources */,
+				233560DF2D6387CE00AC9199 /* Base in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		233560E82D6387D100AC9199 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		233560F22D6387D100AC9199 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2335610C2D638E5100AC9199 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		233560D02D6387CE00AC9199 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2335610A2D638C5D00AC9199 /* CreateAccountViewController.swift in Sources */,
+				230209D82D6582FB00075743 /* PatternDatabase.xcdatamodeld in Sources */,
+				233561082D6389E200AC9199 /* LoginViewController.swift in Sources */,
+				23F1F58F2D655943000B2004 /* PatternDetailViewController.swift in Sources */,
+				233560DC2D6387CE00AC9199 /* ViewController.swift in Sources */,
+				230209DB2D65885B00075743 /* PatternCell.swift in Sources */,
+				233560D82D6387CE00AC9199 /* AppDelegate.swift in Sources */,
+				233560DA2D6387CE00AC9199 /* SceneDelegate.swift in Sources */,
+				230209D02D657F9E00075743 /* PatternLibraryViewController.swift in Sources */,
+				23F1F58B2D655094000B2004 /* DictionaryViewController.swift in Sources */,
+				233561602D654DA700AC9199 /* HomeScreenViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		233560E62D6387D100AC9199 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				233560EF2D6387D100AC9199 /* CrochetAppTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		233560F02D6387D100AC9199 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				233560F92D6387D100AC9199 /* CrochetAppUITests.swift in Sources */,
+				233560FB2D6387D100AC9199 /* CrochetAppUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		233560EC2D6387D100AC9199 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 233560D32D6387CE00AC9199 /* CrochetApp */;
+			targetProxy = 233560EB2D6387D100AC9199 /* PBXContainerItemProxy */;
+		};
+		233560F62D6387D100AC9199 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 233560D32D6387CE00AC9199 /* CrochetApp */;
+			targetProxy = 233560F52D6387D100AC9199 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		233560DD2D6387CE00AC9199 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				233560DE2D6387CE00AC9199 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		233560E22D6387D000AC9199 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				233560E32D6387D000AC9199 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		233560FC2D6387D100AC9199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		233560FD2D6387D100AC9199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		233560FF2D6387D100AC9199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CrochetApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CapstoneIdea.CrochetApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		233561002D6387D100AC9199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CrochetApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CapstoneIdea.CrochetApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		233561022D6387D100AC9199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CapstoneIdea.CrochetAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CrochetApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CrochetApp";
+			};
+			name = Debug;
+		};
+		233561032D6387D100AC9199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CapstoneIdea.CrochetAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CrochetApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CrochetApp";
+			};
+			name = Release;
+		};
+		233561052D6387D100AC9199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CapstoneIdea.CrochetAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CrochetApp;
+			};
+			name = Debug;
+		};
+		233561062D6387D100AC9199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CapstoneIdea.CrochetAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CrochetApp;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		233560CF2D6387CD00AC9199 /* Build configuration list for PBXProject "CrochetApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				233560FC2D6387D100AC9199 /* Debug */,
+				233560FD2D6387D100AC9199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		233560FE2D6387D100AC9199 /* Build configuration list for PBXNativeTarget "CrochetApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				233560FF2D6387D100AC9199 /* Debug */,
+				233561002D6387D100AC9199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		233561012D6387D100AC9199 /* Build configuration list for PBXNativeTarget "CrochetAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				233561022D6387D100AC9199 /* Debug */,
+				233561032D6387D100AC9199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		233561042D6387D100AC9199 /* Build configuration list for PBXNativeTarget "CrochetAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				233561052D6387D100AC9199 /* Debug */,
+				233561062D6387D100AC9199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2335610D2D638FAD00AC9199 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.8.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2335610E2D638FAD00AC9199 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2335610D2D638FAD00AC9199 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		233561102D638FAD00AC9199 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2335610D2D638FAD00AC9199 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		233561122D638FAD00AC9199 /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2335610D2D638FAD00AC9199 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
+		};
+		233561142D638FAD00AC9199 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2335610D2D638FAD00AC9199 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		233561162D638FAD00AC9199 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2335610D2D638FAD00AC9199 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		230209D62D6582FB00075743 /* PatternDatabase.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				230209D72D6582FB00075743 /* PatternDatabase.xcdatamodel */,
+			);
+			currentVersion = 230209D72D6582FB00075743 /* PatternDatabase.xcdatamodel */;
+			name = PatternDatabase.xcdatamodeld;
+			path = /Users/kadyncesicily/CrochetApp/CrochetApp/PatternDatabase.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 233560CC2D6387CD00AC9199 /* Project object */;
+}
