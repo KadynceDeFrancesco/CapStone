@@ -18,22 +18,9 @@ class HomeScreenViewController: UIViewController {
 
         iconButton.isHighlighted = false
         iconButton.isSelected = false
-
-        
-        DispatchQueue.main.async {
-            self.view.endEditing(true)
-        }
-        
         
     }
 
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-    
-    
     
     
     @IBAction func PatternLibraryClicked(_ sender: UIButton) {

@@ -17,6 +17,7 @@ class CreateAccountViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 
     }
     
@@ -26,7 +27,7 @@ class CreateAccountViewController: UIViewController {
         guard let password = PasswordTextField.text else{return}
         
         Auth.auth().createUser(withEmail: email, password: password) { firebaseResult, error in
-            if let e = error{
+            if error != nil{
                 print("error")
             }
             else{

@@ -50,7 +50,7 @@ class LoginViewController: UIViewController {
         guard let password = passwordTextField.text else{return}
         
         Auth.auth().signIn(withEmail: email, password: password) { firebaseResult, error in
-            if let e = error{
+            if error != nil{
                 print("error")
             }
             else{
