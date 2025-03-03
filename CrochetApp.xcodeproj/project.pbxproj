@@ -109,26 +109,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		230209D52D6581F200075743 /* Controller */ = {
+		230209D52D6581F200075743 /* AppContentsController */ = {
 			isa = PBXGroup;
 			children = (
 				230209CF2D657F9E00075743 /* PatternLibraryViewController.swift */,
-				233560DB2D6387CE00AC9199 /* ViewController.swift */,
 				23F1F58E2D655943000B2004 /* PatternDetailViewController.swift */,
-				233561092D638C5D00AC9199 /* CreateAccountViewController.swift */,
-				2336AC0D2D70CB6900C6174F /* CreateUsernameViewController.swift */,
-				233561072D6389E200AC9199 /* LoginViewController.swift */,
 				2335615F2D654DA700AC9199 /* HomeScreenViewController.swift */,
 				23F1F58A2D655094000B2004 /* DictionaryViewController.swift */,
 			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		230209D92D6586E700075743 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
+			path = AppContentsController;
 			sourceTree = "<group>";
 		};
 		233560CB2D6387CD00AC9199 = {
@@ -156,8 +145,8 @@
 			children = (
 				2386E5BA2D659C4A0022505F /* GoogleService-Info.plist */,
 				2386E5B72D65986C0022505F /* Info.plist */,
-				230209D92D6586E700075743 /* View */,
-				230209D52D6581F200075743 /* Controller */,
+				23C0E3822D761CD700777C5D /* LoginSignupControllers */,
+				230209D52D6581F200075743 /* AppContentsController */,
 				233560D72D6387CE00AC9199 /* AppDelegate.swift */,
 				233560D92D6387CE00AC9199 /* SceneDelegate.swift */,
 				233560DD2D6387CE00AC9199 /* Main.storyboard */,
@@ -186,6 +175,17 @@
 				2335610B2D638E5100AC9199 /* GoogleService-Info.plist */,
 			);
 			path = CrochetAppUITests;
+			sourceTree = "<group>";
+		};
+		23C0E3822D761CD700777C5D /* LoginSignupControllers */ = {
+			isa = PBXGroup;
+			children = (
+				233560DB2D6387CE00AC9199 /* ViewController.swift */,
+				233561092D638C5D00AC9199 /* CreateAccountViewController.swift */,
+				2336AC0D2D70CB6900C6174F /* CreateUsernameViewController.swift */,
+				233561072D6389E200AC9199 /* LoginViewController.swift */,
+			);
+			path = LoginSignupControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
