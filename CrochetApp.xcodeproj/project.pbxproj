@@ -10,6 +10,7 @@
 		230209D02D657F9E00075743 /* PatternLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209CF2D657F9E00075743 /* PatternLibraryViewController.swift */; };
 		230209D82D6582FB00075743 /* PatternDatabase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 230209D62D6582FB00075743 /* PatternDatabase.xcdatamodeld */; };
 		230209DB2D65885B00075743 /* PatternCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209DA2D65885B00075743 /* PatternCell.swift */; };
+		231DFD212D77D6F900CD5CFD /* DictionaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231DFD202D77D6F900CD5CFD /* DictionaryCell.swift */; };
 		233560D82D6387CE00AC9199 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560D72D6387CE00AC9199 /* AppDelegate.swift */; };
 		233560DA2D6387CE00AC9199 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560D92D6387CE00AC9199 /* SceneDelegate.swift */; };
 		233560DC2D6387CE00AC9199 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233560DB2D6387CE00AC9199 /* ViewController.swift */; };
@@ -55,6 +56,7 @@
 		230209CF2D657F9E00075743 /* PatternLibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternLibraryViewController.swift; sourceTree = "<group>"; };
 		230209D72D6582FB00075743 /* PatternDatabase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PatternDatabase.xcdatamodel; sourceTree = "<group>"; };
 		230209DA2D65885B00075743 /* PatternCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternCell.swift; sourceTree = "<group>"; };
+		231DFD202D77D6F900CD5CFD /* DictionaryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryCell.swift; sourceTree = "<group>"; };
 		233560D42D6387CE00AC9199 /* CrochetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrochetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		233560D72D6387CE00AC9199 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		233560D92D6387CE00AC9199 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				233560E22D6387D000AC9199 /* LaunchScreen.storyboard */,
 				230209D62D6582FB00075743 /* PatternDatabase.xcdatamodeld */,
 				230209DA2D65885B00075743 /* PatternCell.swift */,
+				231DFD202D77D6F900CD5CFD /* DictionaryCell.swift */,
 			);
 			path = CrochetApp;
 			sourceTree = "<group>";
@@ -333,6 +336,7 @@
 			files = (
 				2335610A2D638C5D00AC9199 /* CreateAccountViewController.swift in Sources */,
 				230209D82D6582FB00075743 /* PatternDatabase.xcdatamodeld in Sources */,
+				231DFD212D77D6F900CD5CFD /* DictionaryCell.swift in Sources */,
 				233561082D6389E200AC9199 /* LoginViewController.swift in Sources */,
 				23F1F58F2D655943000B2004 /* PatternDetailViewController.swift in Sources */,
 				233560DC2D6387CE00AC9199 /* ViewController.swift in Sources */,
@@ -526,8 +530,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CrochetApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Crochet Companion";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -553,8 +559,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CrochetApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Crochet Companion";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

@@ -9,16 +9,6 @@ class HomeScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        patternLibraryButton.isHighlighted = false
-        patternLibraryButton.isSelected = false
-
-        crochetDictionaryButton.isHighlighted = false
-        crochetDictionaryButton.isSelected = false
-
-        iconButton.isHighlighted = false
-        iconButton.isSelected = false
-        
     }
 
     
@@ -30,6 +20,8 @@ class HomeScreenViewController: UIViewController {
     }
     
     @IBAction func CrochetButtonClicked(_ sender: UIButton) {
+        
+        performSegue(withIdentifier: "goToNext", sender: self)
         
     }
     
