@@ -4,6 +4,7 @@ import PDFKit
 class PatternCell: UICollectionViewCell {
     @IBOutlet weak var patternImageView: UIImageView!
     @IBOutlet weak var patternNameLabel: UILabel!
+    
 
     func configure(with pattern: PatternFile) {
         guard let patternNameLabel = patternNameLabel else {
@@ -44,4 +45,6 @@ class PatternCell: UICollectionViewCell {
 
         return image
     }
+    
+    
 }

@@ -1,9 +1,3 @@
-//
-//  SceneDelegate.swift
-//  CrochetApp
-//
-//  Created by Kadynce DeFrancesco on 2/17/25.
-//
 
 import UIKit
 
@@ -49,4 +43,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-

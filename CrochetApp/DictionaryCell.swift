@@ -8,6 +8,3 @@ class DictionaryCell: UITableViewCell {
     
     
 }
-
-
-
