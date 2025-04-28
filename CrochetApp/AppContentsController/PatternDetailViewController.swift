@@ -2,43 +2,232 @@ import UIKit
 import CoreData
 import PDFKit
 
-class PatternDetailViewController: UIViewController {
-    
-    var pattern: PatternFile?
+class PatternDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet weak var patternLabel: UILabel!
-    @IBOutlet weak var filePreview: UIImageView!
-    @IBOutlet weak var pdfView: PDFView! // Make sure this is hooked up in storyboard
-    
+    var pattern: PatternFile?
+    var patternLines: [String] = []
+    var crossedOutRows: Set<Int> = []
+
+    @IBOutlet weak var patternNameTextField: UITextField!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var progressLabel: UILabel!
+    @IBOutlet weak var pdfImage: UIImageView!
+
+
+    var imagePicker = UIImagePickerController()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "LineCell")
+
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+
         displayPattern()
     }
 
     func displayPattern() {
-        guard let pattern = pattern else { return }
-        patternLabel.text = pattern.name
-        
-        if pattern.fileType == "pdf", let fileData = pattern.fileData {
-            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(pattern.name ?? "file").pdf")
-            do {
-                try fileData.write(to: tempURL)
-                let document = PDFDocument(url: tempURL)
-                pdfView.document = document
-                pdfView.autoScales = true
-                filePreview.isHidden = true
-            } catch {
-                print("❌ Failed to load PDF: \(error.localizedDescription)")
+        guard let pattern = pattern else {
+            print("❌ No pattern passed in")
+            return
+        }
+
+        patternNameTextField.text = pattern.name
+
+        if let customImageData = pattern.customImage,
+           let customImage = UIImage(data: customImageData) {
+            pdfImage.image = customImage
+        } else if pattern.fileType == "pdf", let fileData = pattern.fileData {
+            pdfImage.image = getPDFThumbnail(data: fileData)
+        } else {
+            pdfImage.image = UIImage(systemName: "doc.fill")
+        }
+
+        guard pattern.fileType == "pdf", let fileData = pattern.fileData else {
+            print("❌ Not a PDF or missing file data.")
+            return
+        }
+
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(pattern.name ?? "file").pdf")
+
+        do {
+            try fileData.write(to: tempURL)
+            if let document = PDFDocument(url: tempURL) {
+                var allLines: [String] = []
+                for i in 0..<document.pageCount {
+                    if let page = document.page(at: i),
+                       let pageText = page.string {
+                        let lines = pageText.components(separatedBy: .newlines)
+                        allLines.append(contentsOf: lines)
+                    }
+                }
+                patternLines = extractPatternLines(from: allLines)
+
+                DispatchQueue.main.async {
+                    self.updateProgress()
+                    self.tableView.reloadData()
+                }
+            } else {
+                print("❌ Failed to create PDFDocument from URL")
             }
-        } else if let fileData = pattern.fileData, let image = UIImage(data: fileData) {
-            filePreview.image = image
-            pdfView.isHidden = true
+        } catch {
+            print("❌ Failed to write PDF to tempURL: \(error.localizedDescription)")
         }
     }
 
+    func extractPatternLines(from allLines: [String]) -> [String] {
+        return allLines.filter { line in
+            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            return trimmed.lowercased().hasPrefix("rnd") ||
+                   trimmed.lowercased().hasPrefix("row") ||
+                   trimmed.lowercased().hasPrefix("round")
+        }
+    }
+
+    func updateProgress() {
+        let total = patternLines.count
+        let completed = crossedOutRows.count
+        let percent = total > 0 ? Int(Double(completed) / Double(total) * 100) : 0
+        progressLabel.text = "Progress: \(percent)% (\(completed)/\(total))"
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return patternLines.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LineCell", for: indexPath)
+        let line = patternLines[indexPath.row]
+
+        var attributes: [NSAttributedString.Key: Any] = [:]
+        if crossedOutRows.contains(indexPath.row) {
+            attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+            attributes[.foregroundColor] = UIColor.gray
+        }
+
+        cell.textLabel?.attributedText = NSAttributedString(string: line, attributes: attributes)
+        cell.textLabel?.numberOfLines = 0
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if crossedOutRows.contains(indexPath.row) {
+            crossedOutRows.remove(indexPath.row)
+        } else {
+            crossedOutRows.insert(indexPath.row)
+        }
+        updateProgress()
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
+    }
+
+    private func getPDFThumbnail(data: Data) -> UIImage? {
+        guard let pdfDocument = PDFDocument(data: data),
+              let page = pdfDocument.page(at: 0) else {
+            return UIImage(systemName: "exclamationmark.triangle")
+        }
+
+        let targetSize = CGSize(width: 200, height: 280)
+        let pageRect = page.bounds(for: .mediaBox)
+
+        let scale = min(targetSize.width / pageRect.width, targetSize.height / pageRect.height)
+        let scaledSize = CGSize(width: pageRect.width * scale, height: pageRect.height * scale)
+
+        let renderer = UIGraphicsImageRenderer(size: scaledSize)
+
+        return renderer.image { context in
+            UIColor.white.setFill()
+            context.fill(CGRect(origin: .zero, size: scaledSize))
+
+            let cgContext = context.cgContext
+            cgContext.saveGState()
+            cgContext.translateBy(x: 0, y: scaledSize.height)
+            cgContext.scaleBy(x: 1.0, y: -1.0)
+            cgContext.scaleBy(x: scale, y: scale)
+            page.draw(with: .mediaBox, to: cgContext)
+            cgContext.restoreGState()
+        }
+    }
+
+    func saveChanges() {
+        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
+        do {
+            try context.save()
+            print("✅ Pattern updated successfully!")
+        } catch {
+            print("❌ Failed to save updated pattern: \(error.localizedDescription)")
+        }
+    }
+
+    @IBAction func saveNameTapped(_ sender: UIButton) {
+        guard let updatedName = patternNameTextField.text, !updatedName.isEmpty else { return }
+        pattern?.name = updatedName
+        saveChanges()
+    }
+
+    @IBAction func changeImageTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { _ in
+            self.imagePicker.sourceType = .photoLibrary
+            self.present(self.imagePicker, animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
+            
+            let resizedImage = resizeImage(image: selectedImage, targetSize: CGSize(width: 300, height: 300))
+            
+            pdfImage.image = resizedImage
+            
+            if let imageData = resizedImage.jpegData(compressionQuality: 0.8) {
+                pattern?.customImage = imageData
+                saveChanges()
+            }
+        }
+        picker.dismiss(animated: true)
+    }
+
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveChanges()
+    }
+    
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+
+        
+        let scaleFactor = min(widthRatio, heightRatio)
+
+        let newSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+
+        return renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+    }
+
+
     @IBAction func openPatternFile(_ sender: UIButton) {
         guard let pattern = pattern, let fileData = pattern.fileData else { return }
+
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(pattern.name ?? "file").\(pattern.fileType ?? "pdf")")
+
         do {
             try fileData.write(to: tempURL)
             let documentController = UIDocumentInteractionController(url: tempURL)

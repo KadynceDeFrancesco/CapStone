@@ -1,122 +1,152 @@
 import UIKit
 import CoreData
-import UniformTypeIdentifiers
 import PDFKit
+import UniformTypeIdentifiers
 
-class PatternLibraryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIDocumentPickerDelegate {
+class PatternLibraryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, UIDocumentPickerDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var collectionView: UICollectionView! 
-    @IBOutlet weak var datecreatedFiltering: UICommand!
-    @IBOutlet weak var lastopenedFiltering: UICommand!
-    @IBOutlet weak var zaFiltering: UICommand!
-    @IBOutlet weak var azFiltering: UICommand!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var deleteButton: UIButton!
 
-    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var patterns: [PatternFile] = []
     var filteredPatterns: [PatternFile] = []
-    var isFiltering = false
+    
     var isInDeleteMode = false
-
+    var selectedPattern: PatternFile?
+    
+    var isFiltering: Bool {
+        return !(searchBar.text?.isEmpty ?? true)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if collectionView == nil {
-            print("❌ collectionView is nil!")
-        } else {
-            print("✅ collectionView is initialized!")
-        }
-
         collectionView.dataSource = self
         collectionView.delegate = self
-
+        searchBar.delegate = self
+        setupCollectionViewLayout()
+        fetchPatterns()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchPatterns()
     }
 
-    // ✅ Fetch saved patterns from Core Data
+
+    // MARK: - Collection Layout
+    func setupCollectionViewLayout() {
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumInteritemSpacing = 10
+            layout.minimumLineSpacing = 20
+            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        }
+    }
+
+    // MARK: - Fetch CoreData
     func fetchPatterns() {
         let request: NSFetchRequest<PatternFile> = PatternFile.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "dateAdded", ascending: false)]
-
+        
         do {
             patterns = try context.fetch(request)
-            print("✅ Patterns Fetched: \(patterns.count) items")
-
-            for pattern in patterns {
-                let cleanName = pattern.name?.replacingOccurrences(of: ".pdf", with: "") ?? "Unknown"
-                print("➡️ Pattern Name: \(cleanName), Type: \(pattern.fileType ?? "Unknown")")
-            }
-
-            // ✅ Reload collectionView safely
-            DispatchQueue.main.async {
-                if self.collectionView == nil {
-                    print("❌ collectionView is nil!")
-                } else {
-                    print("✅ Reloading collectionView with \(self.patterns.count) items")
-                    self.collectionView.reloadData()
-                }
-            }
+            collectionView.reloadData()
         } catch {
             print("❌ Failed to fetch patterns: \(error.localizedDescription)")
         }
     }
 
-    // ✅ Open Document Picker to Add Patterns
+    // MARK: - Document Picker
     @IBAction func addPatternTapped(_ sender: UIButton) {
-        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.pdf, .image])
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.pdf])
         picker.delegate = self
         picker.allowsMultipleSelection = false
         present(picker, animated: true)
     }
     
-    @IBAction func deleteModeButtonTapped(_ sender: UIBarButtonItem) {
-        isInDeleteMode.toggle()
-        collectionView.reloadData()
+    // MARK: - Filter Button
+    @IBAction func filterButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Sort Patterns", message: "Choose a filter", preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Newest First", style: .default, handler: { _ in
+            self.sortPatterns(by: .newest)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Oldest First", style: .default, handler: { _ in
+            self.sortPatterns(by: .oldest)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Name A–Z", style: .default, handler: { _ in
+            self.sortPatterns(by: .nameAscending)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Name Z–A", style: .default, handler: { _ in
+            self.sortPatterns(by: .nameDescending)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(alert, animated: true)
+    }
 
-        if isInDeleteMode {
-            sender.title = "Done"
-        } else {
-            sender.title = "Delete"
+    enum SortOption {
+        case newest
+        case oldest
+        case nameAscending
+        case nameDescending
+    }
+
+    func sortPatterns(by option: SortOption) {
+        switch option {
+        case .newest:
+            patterns.sort { ($0.dateAdded ?? Date()) > ($1.dateAdded ?? Date()) }
+        case .oldest:
+            patterns.sort { ($0.dateAdded ?? Date()) < ($1.dateAdded ?? Date()) }
+        case .nameAscending:
+            patterns.sort { ($0.name ?? "") < ($1.name ?? "") }
+        case .nameDescending:
+            patterns.sort { ($0.name ?? "") > ($1.name ?? "") }
         }
+        
+        if isFiltering, let searchText = searchBar.text {
+            filteredPatterns = patterns.filter {
+                $0.name?.lowercased().contains(searchText.lowercased()) ?? false
+            }
+        }
+        
+        collectionView.reloadData()
     }
 
 
-    // ✅ Handle selected file from Document Picker
+
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let selectedURL = urls.first else { return }
-        
-        let patternName = selectedURL.deletingPathExtension().lastPathComponent // ✅ Remove ".pdf"
+        let patternName = selectedURL.deletingPathExtension().lastPathComponent
         savePattern(fileURL: selectedURL, patternName: patternName)
     }
 
-    // ✅ Save uploaded file to Core Data
     func savePattern(fileURL: URL, patternName: String) {
         do {
             let fileData = try Data(contentsOf: fileURL)
             let newPattern = PatternFile(context: context)
-
             newPattern.id = UUID()
-            newPattern.name = patternName // ✅ Already without ".pdf"
+            newPattern.name = patternName
             newPattern.fileData = fileData
             newPattern.fileType = fileURL.pathExtension
             newPattern.dateAdded = Date()
 
             try context.save()
-            
-            print("✅ Saved Pattern: \(newPattern.name ?? "Unknown"), Type: \(newPattern.fileType ?? "Unknown")")
-            
-            fetchPatterns() // ✅ Reload collection view after saving
-            
+            fetchPatterns()
         } catch {
             print("❌ Error saving pattern: \(error.localizedDescription)")
         }
     }
 
-    // ✅ UICollectionView Data Source Methods
+    // MARK: - CollectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return patterns.count
+        return isFiltering ? filteredPatterns.count : patterns.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -124,73 +154,83 @@ class PatternLibraryViewController: UIViewController, UICollectionViewDataSource
             fatalError("❌ Failed to dequeue PatternCell")
         }
 
-        let pattern = patterns[indexPath.row]
-        cell.configure(with: pattern)
+        let pattern = isFiltering ? filteredPatterns[indexPath.row] : patterns[indexPath.row]
+        cell.configure(with: pattern) { [weak self] in
+            print("🔁 Image tapped for: \(pattern.name ?? "Unnamed")")
+            self?.selectedPattern = pattern
+            self?.performSegue(withIdentifier: "goToNext", sender: self)
+        }
+
         return cell
     }
-    
+
+    // MARK: - Dynamic Cell Sizing
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let itemsPerRow: CGFloat = 2
+        let padding: CGFloat = 8
+        let totalPadding = padding * (itemsPerRow + 1)
+        let availableWidth = collectionView.frame.width - totalPadding
+        let itemWidth = availableWidth / itemsPerRow
+
+        return CGSize(width: itemWidth, height: itemWidth + 10)
+    }
+
+    // MARK: - Search Filtering
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
-            isFiltering = false
-            filteredPatterns = patterns
+            filteredPatterns = []
         } else {
-            isFiltering = true
-            filteredPatterns = patterns.filter { $0.name?.lowercased().contains(searchText.lowercased()) ?? false }
+            filteredPatterns = patterns.filter {
+                $0.name?.lowercased().contains(searchText.lowercased()) ?? false
+            }
         }
-        collectionView.reloadData() // Ensure you reload the correct view
+        collectionView.reloadData()
     }
-    
-    // MARK: - Handle Pattern Selection for Deletion
+
+    // MARK: - Delete Mode
+    @IBAction func deleteButtonTapped(_ sender: UIButton) {
+        isInDeleteMode.toggle()
+        deleteButton.setTitle(isInDeleteMode ? "Cancel Delete" : "Delete", for: .normal)
+        selectedPattern = nil
+    }
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selected = isFiltering ? filteredPatterns[indexPath.row] : patterns[indexPath.row]
         if isInDeleteMode {
-            let selectedPattern = patterns[indexPath.row]
-            confirmDeletion(for: selectedPattern)
+            confirmDeletion(for: selected)
+        } else {
+            // This is unused now because image tap triggers segue
         }
     }
 
-    // MARK: - Confirm Deletion with Alert
     func confirmDeletion(for pattern: PatternFile) {
-        let alert = UIAlertController(
-            title: "Delete Pattern",
-            message: "Are you sure you want to delete \"\(pattern.name ?? "Unnamed")\"?",
-            preferredStyle: .alert
-        )
-        
+        let alert = UIAlertController(title: "Delete Pattern", message: "Are you sure?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
-            self.deletePattern(pattern)
+            self.context.delete(pattern)
+            do {
+                try self.context.save()
+                self.fetchPatterns()
+            } catch {
+                print("❌ Failed to delete pattern: \(error)")
+            }
+            self.isInDeleteMode = false
+            self.deleteButton.setTitle("Delete", for: .normal)
         }))
-        
         present(alert, animated: true)
     }
-
-    // MARK: - Delete Pattern from Core Data
-    func deletePattern(_ pattern: PatternFile) {
-        context.delete(pattern)
-        do {
-            try context.save()
-            fetchPatterns() // Refresh UI
-        } catch {
-            print("❌ Failed to delete pattern: \(error)")
-        }
-    }
-
-
-
     
-    func sortPatterns(by option: String) {
-        switch option {
-        case "dateCreated":
-            patterns.sort { $0.dateAdded ?? Date() > $1.dateAdded ?? Date() }
-        case "A-Z":
-            patterns.sort { ($0.name ?? "").lowercased() < ($1.name ?? "").lowercased() }
-        case "Z-A":
-            patterns.sort { ($0.name ?? "").lowercased() > ($1.name ?? "").lowercased() }
-        default:
-            break
-        }
 
-        collectionView.reloadData()
+    // MARK: - Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToNext",
+           let destinationVC = segue.destination as? PatternDetailViewController,
+           let patternToSend = selectedPattern {
+            print("✅ Passing pattern: \(patternToSend.name ?? "Unnamed")")
+            destinationVC.pattern = patternToSend
+        } else {
+            print("❌ Pattern not passed. Segue identifier or destination may be incorrect.")
+        }
     }
 
 }

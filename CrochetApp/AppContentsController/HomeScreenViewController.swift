@@ -6,7 +6,6 @@ import SDWebImage
 
 class HomeScreenViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet weak var videoLibraryButton: UIButton!
     @IBOutlet weak var crochetDictionaryButton: UIButton!
     @IBOutlet weak var patternLibraryButton: UIButton!
     @IBOutlet weak var iconButton: UIButton!
@@ -23,6 +22,10 @@ class HomeScreenViewController: UIViewController, UIImagePickerControllerDelegat
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
 
     private func fetchUserData() {
         guard let userId = Auth.auth().currentUser?.uid else {

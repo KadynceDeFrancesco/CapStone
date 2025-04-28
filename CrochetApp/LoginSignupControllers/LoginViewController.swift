@@ -1,10 +1,3 @@
-//
-//  LoginViewController.swift
-//  CrochetApp
-//
-//  Created by Kadynce DeFrancesco on 2/17/25.
-//
-
 import UIKit
 import Firebase
 import FirebaseAuth
@@ -23,7 +16,7 @@ class LoginViewController: UIViewController {
         setupPasswordToggle()
         errorLabel.isHidden = true
 
-        // Optional: Sign out any existing user for testing
+
         try? Auth.auth().signOut()
     }
     
