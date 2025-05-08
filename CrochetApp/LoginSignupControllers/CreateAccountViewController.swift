@@ -1,3 +1,9 @@
+//Manages account creation including name, email, phone, and password validation.
+//Checks email and phone availability using Firestore queries.
+//Ensures strong passwords and field completion.
+//On success, creates a Firebase Auth user and saves a Firestore user document.
+//Transitions to `CreateUsernameViewController` upon completion.
+
 import UIKit
 import Firebase
 import FirebaseAuth
@@ -5,6 +11,7 @@ import FirebaseFirestore
 
 class CreateAccountViewController: UIViewController, UITextFieldDelegate {
 
+    // MARK: - Outlets
     @IBOutlet weak var NameTextField: UITextField!
     @IBOutlet weak var EmailTextField: UITextField!
     @IBOutlet weak var PhoneTextField: UITextField!
@@ -16,6 +23,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailStatusLabel: UILabel!
     @IBOutlet weak var phoneStatusLabel: UILabel!
 
+    // MARK: - Properties
     var userId: String?
 
     var isEmailAvailable = false { didSet { updateCreateAccountButtonState() } }
@@ -31,7 +39,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
 
         errorMessageLabel.text = ""
         errorMessageLabel.numberOfLines = 0
-        passwordRulesLabel.text = "Password must be at least 6 characters,\nuppercase, lowercase, number, and special character."
+        passwordRulesLabel.text = "Password must be at least 6 characters,\nuppercase, lowercase, number, and \nspecial character."
         passwordRulesLabel.numberOfLines = 0
 
         emailStatusLabel.text = ""
@@ -100,8 +108,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             return
         }
 
-        let db = Firestore.firestore()
-        db.collection("userInformation").whereField("email", isEqualTo: email).getDocuments { snapshot, error in
+        Firestore.firestore().collection("userInformation").whereField("email", isEqualTo: email).getDocuments { snapshot, error in
             if snapshot?.documents.count ?? 0 > 0 {
                 self.emailStatusLabel.text = "🚫 Email already in use."
                 self.emailStatusLabel.textColor = .red
@@ -121,8 +128,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             return
         }
 
-        let db = Firestore.firestore()
-        db.collection("userInformation").whereField("phoneNumber", isEqualTo: phone).getDocuments { snapshot, error in
+        Firestore.firestore().collection("userInformation").whereField("phoneNumber", isEqualTo: phone).getDocuments { snapshot, error in
             if snapshot?.documents.count ?? 0 > 0 {
                 self.phoneStatusLabel.text = "🚫 Phone already in use."
                 self.phoneStatusLabel.textColor = .red
@@ -165,6 +171,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
                     self.updateCreateAccountButtonState()
                     return
                 }
+                
+                print("🚨 Button pressed")
 
                 self.AuthCreateUser(email: email, password: password, name: name, phone: phone)
             }
@@ -178,19 +186,12 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             } else if let user = firebaseResult?.user {
                 self.userId = user.uid
                 print("✅ Created Auth user with UID: \(user.uid)")
-
-                if self.userId == nil {
-                    print("❌ ERROR: userId is nil after Auth creation!!")
-                }
-
                 self.saveInitialUserData(userId: user.uid, email: email, name: name, phone: phone)
             }
         }
     }
 
-
     private func saveInitialUserData(userId: String, email: String, name: String, phone: String) {
-        let db = Firestore.firestore()
         let userData: [String: Any] = [
             "uid": userId,
             "email": email,
@@ -203,7 +204,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             "pfpURL": ""
         ]
 
-        db.collection("userInformation").document(userId).setData(userData) { error in
+        Firestore.firestore().collection("userInformation").document(userId).setData(userData) { error in
             if let error = error {
                 print("❌ Failed to create Firestore document: \(error.localizedDescription)")
                 self.errorMessageLabel.text = "🚫 Could not save user info."
@@ -211,19 +212,22 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             }
 
             print("✅ Firestore document created for UID: \(userId)")
-
-            if let userId = self.userId {
-                print("✅ About to perform segue with userId: \(userId)")
-                self.performSegue(withIdentifier: "goToNext", sender: userId)
-            } else {
-                print("❌ Cannot segue because userId is still nil!!")
+            guard let safeUserId = self.userId else {
+                print("❌ userId is nil at segue time!")
+                return
             }
 
+            DispatchQueue.main.async {
+                print("🔥 Performing segue with userId: \(safeUserId)")
+                self.performSegue(withIdentifier: "goToNext", sender: safeUserId)
+            }
         }
     }
 
+    // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToNext" {
+            print("🛫 Received sender: \(String(describing: sender)), type: \(type(of: sender))")
             if let destinationVC = segue.destination as? CreateUsernameViewController,
                let userId = sender as? String {
                 print("✅ Passing userId to CreateUsernameViewController: \(userId)")

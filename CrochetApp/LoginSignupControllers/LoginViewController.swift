@@ -1,3 +1,8 @@
+//Handles user login via Firebase Authentication.
+//Collects email and password input, validates them, and attempts sign-in.
+//Provides user feedback via error labels.
+//Includes toggle functionality for password visibility.
+//On successful login, transitions to the main screen.
 import UIKit
 import Firebase
 import FirebaseAuth

@@ -1,3 +1,9 @@
+//Final step of the account creation process.
+//Collects username, years of experience, number of projects, and profile picture.
+//Verifies username availability with Firestore.
+//Uploads profile picture to Firebase Storage and saves metadata to Firestore.
+//Cleans up incomplete user data if the user exits prematurely.
+
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
@@ -5,7 +11,7 @@ import FirebaseStorage
 
 class CreateUsernameViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
-    // MARK: - IBOutlets
+    // MARK: - Outlets
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var usernameStatusLabel: UILabel!
     @IBOutlet weak var yearsExperienceTextField: UITextField!
@@ -16,78 +22,58 @@ class CreateUsernameViewController: UIViewController, UIImagePickerControllerDel
     // MARK: - Properties
     var userId: String?
     var selectedProfileImage: UIImage?
-
     var isUsernameAvailable = false {
         didSet { updateCreateButtonState() }
     }
-
     var hasCompletedAccountCreation = false
 
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupUI()
+        print("👋 viewDidLoad - userId = \(userId ?? "nil")")
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        profilePictureButton.layer.cornerRadius = profilePictureButton.frame.size.width / 2
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        print("👀 userId when arriving at CreateUsernameViewController: \(userId ?? "nil")")
+        print("👀 viewDidAppear - userId = \(userId ?? "nil")")
 
         if self.userId == nil {
             self.userId = Auth.auth().currentUser?.uid
-            print("🔄 Pulled userId from Firebase Auth: \(userId ?? "nil")")
+            print("🔄 Fallback to Firebase Auth: \(self.userId ?? "nil")")
         }
 
         if let userId = self.userId {
-            print("✅ userId available: \(userId)")
             if !hasCompletedAccountCreation {
-                checkFirestoreDocumentExists()
+                checkFirestoreDocumentExists(userId: userId)
             }
         } else {
-            print("❌ STILL missing user ID.")
             showAlert(title: "Error", message: "Missing user ID.")
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
         if !hasCompletedAccountCreation && isMovingFromParent {
             cleanUpIncompleteUser()
         }
     }
 
-    // MARK: - UI Setup
+    // MARK: - Setup
     private func setupUI() {
-        profilePictureButton.layer.cornerRadius = profilePictureButton.frame.size.width / 2
         profilePictureButton.clipsToBounds = true
-
         usernameTextField.delegate = self
         usernameTextField.addTarget(self, action: #selector(usernameTextFieldDidChange), for: .editingChanged)
-
         createAccountButton.isEnabled = false
         createAccountButton.alpha = 0.5
     }
 
-    // MARK: - Firestore Safety Check
-    private func checkFirestoreDocumentExists() {
-        guard let userId = self.userId else {
-            showAlert(title: "Error", message: "Missing user ID.")
-            return
-        }
-
-        Firestore.firestore().collection("userInformation").document(userId).getDocument { doc, error in
-            if let error = error {
-                self.showAlert(title: "Error", message: "Could not check user record: \(error.localizedDescription)")
-            } else if doc?.exists == false {
-                self.showAlert(title: "Account Error", message: "User record not found. Please restart registration.")
-            }
-        }
-    }
-
-    // MARK: - Username Availability
+    // MARK: - Username Check
     @objc private func usernameTextFieldDidChange(_ textField: UITextField) {
         guard let username = textField.text, !username.isEmpty else {
             usernameStatusLabel.text = ""
@@ -95,8 +81,7 @@ class CreateUsernameViewController: UIViewController, UIImagePickerControllerDel
             return
         }
 
-        let db = Firestore.firestore()
-        db.collection("userInformation")
+        Firestore.firestore().collection("userInformation")
             .whereField("userName", isEqualTo: username)
             .getDocuments { snapshot, error in
                 if let error = error {
@@ -123,7 +108,17 @@ class CreateUsernameViewController: UIViewController, UIImagePickerControllerDel
         createAccountButton.alpha = isUsernameAvailable ? 1.0 : 0.5
     }
 
-    // MARK: - Profile Picture Selection
+    private func checkFirestoreDocumentExists(userId: String) {
+        Firestore.firestore().collection("userInformation").document(userId).getDocument { doc, error in
+            if let error = error {
+                self.showAlert(title: "Error", message: "Could not check user record: \(error.localizedDescription)")
+            } else if doc?.exists == false {
+                self.showAlert(title: "Account Error", message: "User record not found. Please restart registration.")
+            }
+        }
+    }
+
+    // MARK: - Profile Picture
     @IBAction func profilePictureButtonTapped(_ sender: UIButton) {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -139,7 +134,7 @@ class CreateUsernameViewController: UIViewController, UIImagePickerControllerDel
         }
     }
 
-    // MARK: - Create Final Account Info
+    // MARK: - Final Account Creation
     @IBAction func createAccountButtonTapped(_ sender: UIButton) {
         guard let uid = self.userId,
               let username = usernameTextField.text, !username.isEmpty,
@@ -180,7 +175,6 @@ class CreateUsernameViewController: UIViewController, UIImagePickerControllerDel
     }
 
     private func saveUserData(uid: String, username: String, numYears: Int, numProjects: Int, pfpURL: String) {
-        let db = Firestore.firestore()
         let updatedData: [String: Any] = [
             "userName": username,
             "numYearsCrochet": numYears,
@@ -189,7 +183,7 @@ class CreateUsernameViewController: UIViewController, UIImagePickerControllerDel
             "updatedAt": FieldValue.serverTimestamp()
         ]
 
-        db.collection("userInformation").document(uid).setData(updatedData, merge: true) { error in
+        Firestore.firestore().collection("userInformation").document(uid).setData(updatedData, merge: true) { error in
             self.dismiss(animated: true) {
                 if let error = error {
                     self.showAlert(title: "Error Saving", message: error.localizedDescription)
@@ -201,12 +195,11 @@ class CreateUsernameViewController: UIViewController, UIImagePickerControllerDel
         }
     }
 
-    // MARK: - Cleanup on Cancel
+    // MARK: - Cleanup if Exited
     private func cleanUpIncompleteUser() {
         guard let uid = self.userId else { return }
 
-        let db = Firestore.firestore()
-        db.collection("userInformation").document(uid).delete { error in
+        Firestore.firestore().collection("userInformation").document(uid).delete { error in
             print(error == nil ? "Deleted Firestore user data." : "Firestore delete error: \(error!.localizedDescription)")
         }
 
@@ -215,7 +208,7 @@ class CreateUsernameViewController: UIViewController, UIImagePickerControllerDel
         }
     }
 
-    // MARK: - Helper UI Methods
+    // MARK: - UI Alerts
     private func showLoadingAlert(completion: @escaping () -> Void) {
         let loadingAlert = UIAlertController(title: nil, message: "Creating your account...\n\n", preferredStyle: .alert)
         let spinner = UIActivityIndicatorView(style: .medium)

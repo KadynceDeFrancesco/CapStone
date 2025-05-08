@@ -1,3 +1,7 @@
+//Displays the complete library of saved crochet patterns.
+//Loads patterns from Core Data and allows sorting and searching.
+//Supports adding new patterns via a PDF document picker.
+//Includes delete mode for removing patterns and navigates to the pattern detail screen.
 import UIKit
 import CoreData
 import PDFKit
@@ -32,18 +36,21 @@ class PatternLibraryViewController: UIViewController, UICollectionViewDataSource
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchPatterns()
+        collectionView.reloadData()
     }
+
 
 
     // MARK: - Collection Layout
     func setupCollectionViewLayout() {
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
-            layout.minimumInteritemSpacing = 10
+            layout.minimumInteritemSpacing = 5
             layout.minimumLineSpacing = 20
             layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         }
     }
+
 
     // MARK: - Fetch CoreData
     func fetchPatterns() {
@@ -150,30 +157,46 @@ class PatternLibraryViewController: UIViewController, UICollectionViewDataSource
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print("🔎 Attempting to dequeue PatternCell")
+
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PatternCell", for: indexPath) as? PatternCell else {
             fatalError("❌ Failed to dequeue PatternCell")
         }
 
+
+        cell.setDeleteMode(isInDeleteMode)
+
         let pattern = isFiltering ? filteredPatterns[indexPath.row] : patterns[indexPath.row]
-        cell.configure(with: pattern) { [weak self] in
-            print("🔁 Image tapped for: \(pattern.name ?? "Unnamed")")
-            self?.selectedPattern = pattern
-            self?.performSegue(withIdentifier: "goToNext", sender: self)
-        }
+
+        cell.configure(
+            with: pattern,
+            onViewTapped: { [weak self] in
+                print("🔁 Image tapped for: \(pattern.name ?? "Unnamed")")
+                self?.selectedPattern = pattern
+                self?.performSegue(withIdentifier: "goToNext", sender: self)
+            },
+            onDeleteTapped: { [weak self] in
+                guard let self = self else { return }
+                self.confirmDeletion(for: pattern)
+            }
+        )
 
         return cell
     }
 
+
+
     // MARK: - Dynamic Cell Sizing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let itemsPerRow: CGFloat = 2
-        let padding: CGFloat = 8
-        let totalPadding = padding * (itemsPerRow + 1)
-        let availableWidth = collectionView.frame.width - totalPadding
-        let itemWidth = availableWidth / itemsPerRow
+        let itemsPerRow: CGFloat = 3
+        let paddingSpace: CGFloat = 10 * (itemsPerRow + 1)
+        let availableWidth = collectionView.frame.width - paddingSpace
+        let widthPerItem = availableWidth / itemsPerRow
 
-        return CGSize(width: itemWidth, height: itemWidth + 10)
+        return CGSize(width: widthPerItem, height: widthPerItem + 30)
     }
+
+
 
     // MARK: - Search Filtering
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -192,7 +215,9 @@ class PatternLibraryViewController: UIViewController, UICollectionViewDataSource
         isInDeleteMode.toggle()
         deleteButton.setTitle(isInDeleteMode ? "Cancel Delete" : "Delete", for: .normal)
         selectedPattern = nil
+        collectionView.reloadData()
     }
+
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selected = isFiltering ? filteredPatterns[indexPath.row] : patterns[indexPath.row]

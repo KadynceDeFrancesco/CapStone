@@ -1,3 +1,7 @@
+//Shows and edits the details of a selected pattern, including instructions and progress.
+//Displays a thumbnail (PDF or image), editable name, and step-by-step rows parsed from a PDF.
+//Allows row-level tracking with progress updates.
+//Includes image picker to update the cover image and PDF viewer launching capability.
 import UIKit
 import CoreData
 import PDFKit
@@ -12,23 +16,50 @@ class PatternDetailViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var progressLabel: UILabel!
     @IBOutlet weak var pdfImage: UIImageView!
-
+    @IBOutlet weak var openFileButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
 
     var imagePicker = UIImagePickerController()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        patternNameTextField.addTarget(self, action: #selector(nameFieldDidChange), for: .editingChanged)
+
+        saveButton.isHidden = true
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "LineCell")
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 80
 
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
+        imagePicker.sourceType = .photoLibrary
+
+        pdfImage.layer.cornerRadius = 16
+        pdfImage.layer.masksToBounds = true
+        pdfImage.clipsToBounds = true
+        pdfImage.contentMode = .scaleAspectFill
+    
+        
+        DispatchQueue.main.async {
+            self.view.bringSubviewToFront(self.pdfImage)
+            self.view.bringSubviewToFront(self.openFileButton)
+            self.view.bringSubviewToFront(self.saveButton)
+        }
 
         displayPattern()
     }
 
+
+
     func displayPattern() {
+        if let savedRows = pattern?.crossedOutRows as? [Int] {
+            crossedOutRows = Set(savedRows)
+        }
+
         guard let pattern = pattern else {
             print("❌ No pattern passed in")
             return
@@ -82,6 +113,7 @@ class PatternDetailViewController: UIViewController, UITableViewDataSource, UITa
             let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
             return trimmed.lowercased().hasPrefix("rnd") ||
                    trimmed.lowercased().hasPrefix("row") ||
+                   trimmed.lowercased().hasPrefix("rounds") ||
                    trimmed.lowercased().hasPrefix("round")
         }
     }
@@ -91,6 +123,11 @@ class PatternDetailViewController: UIViewController, UITableViewDataSource, UITa
         let completed = crossedOutRows.count
         let percent = total > 0 ? Int(Double(completed) / Double(total) * 100) : 0
         progressLabel.text = "Progress: \(percent)% (\(completed)/\(total))"
+
+        pattern?.progress = Int32(percent)
+        pattern?.crossedOutRows = Array(crossedOutRows) as NSObject as? NSArray
+
+        saveChanges()
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -169,10 +206,15 @@ class PatternDetailViewController: UIViewController, UITableViewDataSource, UITa
     }
 
     @IBAction func saveNameTapped(_ sender: UIButton) {
+
+        view.endEditing(true)
+
         guard let updatedName = patternNameTextField.text, !updatedName.isEmpty else { return }
         pattern?.name = updatedName
         saveChanges()
+        saveButton.isHidden = true
     }
+
 
     @IBAction func changeImageTapped(_ sender: UIButton) {
         let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
@@ -185,33 +227,34 @@ class PatternDetailViewController: UIViewController, UITableViewDataSource, UITa
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let selectedImage = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
-            
-            let resizedImage = resizeImage(image: selectedImage, targetSize: CGSize(width: 300, height: 300))
-            
-            pdfImage.image = resizedImage
-            
-            if let imageData = resizedImage.jpegData(compressionQuality: 0.8) {
-                pattern?.customImage = imageData
-                saveChanges()
-            }
+        if let editedImage = info[.editedImage] as? UIImage {
+            handleSelectedImage(editedImage)
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            handleSelectedImage(originalImage)
         }
+
         picker.dismiss(animated: true)
     }
 
+    func handleSelectedImage(_ image: UIImage) {
+        let resized = resizeImage(image: image, targetSize: CGSize(width: 300, height: 300))
+        pdfImage.image = resized
+
+        if let imageData = resized.jpegData(compressionQuality: 0.8) {
+            pattern?.customImage = imageData
+            saveChanges()
+        }
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         saveChanges()
     }
-    
+
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
-
         let widthRatio  = targetSize.width  / size.width
         let heightRatio = targetSize.height / size.height
-
-        
         let scaleFactor = min(widthRatio, heightRatio)
 
         let newSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
@@ -222,6 +265,20 @@ class PatternDetailViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
 
+    @objc func nameFieldDidChange() {
+        guard let updatedName = patternNameTextField.text, !updatedName.isEmpty else {
+            saveButton.isHidden = true
+            return
+        }
+
+        if updatedName != pattern?.name {
+            saveButton.isHidden = false
+        } else {
+            saveButton.isHidden = true
+        }
+
+        pattern?.name = updatedName
+    }
 
     @IBAction func openPatternFile(_ sender: UIButton) {
         guard let pattern = pattern, let fileData = pattern.fileData else { return }

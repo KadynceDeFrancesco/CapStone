@@ -1,3 +1,7 @@
+//Custom UITableViewCell for dictionary entries with expandable video and definition.
+//Uses a vertical stack view to manage layout.
+//Integrates AVPlayer for video playback with controls for play, pause, and expand.
+//Uses a delegate to trigger full-screen video from the parent view controller.
 import UIKit
 import AVKit
 
@@ -64,10 +68,17 @@ class DictionaryCell: UITableViewCell {
         playButton.setTitle("Play", for: .normal)
         pauseButton.setTitle("Pause", for: .normal)
         expandButton.setTitle("Expand", for: .normal)
+        
+        let buttonColor = UIColor(red: 0.584, green: 0.396, blue: 0.706, alpha: 1)
 
-        playButton.addTarget(self, action: #selector(playPressed), for: .touchUpInside)
-        pauseButton.addTarget(self, action: #selector(pausePressed), for: .touchUpInside)
-        expandButton.addTarget(self, action: #selector(expandPressed), for: .touchUpInside)
+        playButton.setTitleColor(buttonColor, for: .normal)
+        pauseButton.setTitleColor(buttonColor, for: .normal)
+        expandButton.setTitleColor(buttonColor, for: .normal)
+
+        
+        playButton.setTitle("Play", for: .normal)
+        pauseButton.setTitle("Pause", for: .normal)
+        expandButton.setTitle("Expand", for: .normal)
 
         buttonStackView = UIStackView(arrangedSubviews: [playButton, pauseButton, expandButton])
         buttonStackView.axis = .horizontal
@@ -93,18 +104,35 @@ class DictionaryCell: UITableViewCell {
     func configure(with term: String, definition: String, videoFileName: String) {
         titleLabel.text = term
         definitionLabel.text = definition
+        player?.pause()
+        player = nil
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
 
-        if player == nil, let path = Bundle.main.path(forResource: videoFileName, ofType: "mp4") {
-            let url = URL(fileURLWithPath: path)
-            player = AVPlayer(url: url)
-            playerLayer = AVPlayerLayer(player: player)
-            playerLayer?.videoGravity = .resizeAspect
-            playerLayer?.frame = videoPlayerView.bounds
-            if let layer = playerLayer {
-                videoPlayerView.layer.addSublayer(layer)
+
+        if player == nil {
+            if let path = Bundle.main.path(forResource: videoFileName, ofType: "mov") {
+                print("✅ Found video: \(videoFileName).mov")
+                let videoURL = URL(fileURLWithPath: path)
+                player = AVPlayer(url: videoURL)
+                playerLayer = AVPlayerLayer(player: player)
+                playerLayer?.videoGravity = .resizeAspect
+                playerLayer?.frame = videoPlayerView.bounds
+                if let layer = playerLayer {
+                    videoPlayerView.layer.addSublayer(layer)
+                }
+            } else {
+                
             }
         }
+
+
+        playButton.addTarget(self, action: #selector(playPressed), for: .touchUpInside)
+        pauseButton.addTarget(self, action: #selector(pausePressed), for: .touchUpInside)
+        expandButton.addTarget(self, action: #selector(expandPressed), for: .touchUpInside)
     }
+
+
 
     @objc private func playPressed() {
         player?.play()
@@ -118,10 +146,6 @@ class DictionaryCell: UITableViewCell {
         if let player = player {
             delegate?.expandVideo(player: player)
         }
-    }
-
-    func playVideo() {
-        // No auto-play anymore
     }
 
     func stopVideo() {

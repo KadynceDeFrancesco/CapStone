@@ -1,82 +1,85 @@
+//UICollectionViewCell used on the Home screen to show work-in-progress patterns.
+//Displays a tappable pattern icon with image, progress badge, and name label.
+//Loads images from custom data or renders PDF thumbnail if no image provided.
+
 import UIKit
 import PDFKit
 import AVFoundation
 
-class PatternCell: UICollectionViewCell {
+class WIPCell: UICollectionViewCell {
+
     @IBOutlet weak var patternImageButton: UIButton!
     @IBOutlet weak var patternNameLabel: UILabel!
-    
-    var onViewTapped: (() -> Void)?
-    var onDeleteTapped: (() -> Void)?
 
-    
-    private let deleteButton = UIButton(type: .custom)
-    
+    var onViewTapped: (() -> Void)?
+
+    let progressLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        label.textColor = .white
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        label.textAlignment = .center
+        label.layer.cornerRadius = 8
+        label.layer.masksToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     @IBAction func imageButtonTapped(_ sender: UIButton) {
-        print("📸 Pattern image tapped")
         onViewTapped?()
     }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        contentView.clipsToBounds = false
-        self.clipsToBounds = false
-        
-        var config = UIButton.Configuration.plain()
-        config.imagePadding = 10
-        config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-        patternImageButton.configuration = config
 
-        patternImageButton.imageView?.contentMode = .scaleAspectFit
-        patternImageButton.configuration?.imagePlacement = .top
-        patternImageButton.contentHorizontalAlignment = .center
-        patternImageButton.contentVerticalAlignment = .center
+        contentView.layer.cornerRadius = 16
+        contentView.layer.masksToBounds = true
 
-        patternImageButton.layer.cornerRadius = 12
-        patternImageButton.layer.masksToBounds = true
-        patternImageButton.layer.borderWidth = 4
-        patternImageButton.layer.borderColor = UIColor(red: 0.584, green: 0.396, blue: 0.706, alpha: 1).cgColor
-        
-        
-        setupDeleteButton()
-    }
-    
-    private func setupDeleteButton() {
-        deleteButton.setImage(UIImage(systemName: "minus.circle.fill"), for: .normal)
-        deleteButton.tintColor = .red
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.isHidden = true
-        contentView.addSubview(deleteButton)
-        
+        patternImageButton.layer.cornerRadius = 16
+        patternImageButton.clipsToBounds = true
+        patternImageButton.contentHorizontalAlignment = .fill
+        patternImageButton.contentVerticalAlignment = .fill
+        patternImageButton.imageView?.contentMode = .scaleToFill
+        patternImageButton.imageView?.clipsToBounds = true
+
+        patternImageButton.layer.borderWidth = 1.5
+        patternImageButton.layer.borderColor = UIColor.systemGray4.cgColor
+        patternImageButton.layer.shadowColor = UIColor.black.cgColor
+        patternImageButton.layer.shadowOpacity = 0.2
+        patternImageButton.layer.shadowOffset = CGSize(width: 0, height: 2)
+        patternImageButton.layer.shadowRadius = 4
+
+        patternNameLabel.textAlignment = .center
+        patternNameLabel.numberOfLines = 2
+        patternNameLabel.adjustsFontSizeToFitWidth = true
+        patternNameLabel.minimumScaleFactor = 0.7
+        patternNameLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+
+        contentView.addSubview(progressLabel)
         NSLayoutConstraint.activate([
-            deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
-            deleteButton.widthAnchor.constraint(equalToConstant: 24),
-            deleteButton.heightAnchor.constraint(equalToConstant: 24)
+            progressLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            progressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            progressLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 40),
+            progressLabel.heightAnchor.constraint(equalToConstant: 24)
         ])
-
-        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
     }
 
-    @objc private func deleteButtonTapped() {
-        onDeleteTapped?()
-    }
 
-    
     func configure(with pattern: PatternFile, onViewTapped: @escaping () -> Void, onDeleteTapped: (() -> Void)? = nil) {
         self.onViewTapped = onViewTapped
-        self.onDeleteTapped = onDeleteTapped
-        
-        patternImageButton.imageView?.contentMode = .scaleAspectFit
-        
+
+        if pattern.progress > 0 {
+            progressLabel.text = "\(pattern.progress)%"
+            progressLabel.isHidden = false
+        } else {
+            progressLabel.isHidden = true
+        }
+
         let cleanName = pattern.name?.replacingOccurrences(of: ".pdf", with: "") ?? "Unknown Pattern"
         patternNameLabel.text = cleanName
-        patternNameLabel.textAlignment = .center
-        patternNameLabel.numberOfLines = 1
 
         var displayImage: UIImage?
-        
+
         if let customImageData = pattern.customImage, let customImage = UIImage(data: customImageData) {
             displayImage = customImage
         } else if let data = pattern.fileData, pattern.fileType == "pdf" {
@@ -84,25 +87,36 @@ class PatternCell: UICollectionViewCell {
         } else {
             displayImage = UIImage(systemName: "doc.fill")
         }
-        
-        if let image = displayImage {
-            let resized = resizeForButton(image: image)
-            patternImageButton.setImage(resized, for: .normal)
-        }
-    }
-    
-    private func resizeForButton(image: UIImage) -> UIImage {
-        let buttonSize = CGSize(width: 125, height: 125)
-        let aspectFitRect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(origin: .zero, size: buttonSize))
 
+        if let image = displayImage {
+            patternImageButton.setImage(image, for: .normal)
+        }
+
+    }
+
+    private func resizeForButton(image: UIImage) -> UIImage {
+        let buttonSize = CGSize(width: 100, height: 100)
         let renderer = UIGraphicsImageRenderer(size: buttonSize)
+
         return renderer.image { _ in
             UIColor.clear.setFill()
             UIBezierPath(rect: CGRect(origin: .zero, size: buttonSize)).fill()
-            image.draw(in: aspectFitRect)
+
+            let aspectRatio = image.size.width / image.size.height
+            var drawRect = CGRect.zero
+
+            if aspectRatio > 1 {
+                let height = buttonSize.width / aspectRatio
+                drawRect = CGRect(x: 0, y: (buttonSize.height - height)/2, width: buttonSize.width, height: height)
+            } else {
+                let width = buttonSize.height * aspectRatio
+                drawRect = CGRect(x: (buttonSize.width - width)/2, y: 0, width: width, height: buttonSize.height)
+            }
+
+            image.draw(in: drawRect)
         }
     }
-    
+
     private func getPDFThumbnail(data: Data) -> UIImage? {
         guard let pdfDocument = PDFDocument(data: data),
               let page = pdfDocument.page(at: 0) else {
@@ -129,28 +143,5 @@ class PatternCell: UICollectionViewCell {
             page.draw(with: .mediaBox, to: cgContext)
             cgContext.restoreGState()
         }
-    }
-    
-    func setDeleteMode(_ enabled: Bool) {
-        deleteButton.isHidden = !enabled
-        if enabled {
-            startWiggle()
-        } else {
-            stopWiggle()
-        }
-    }
-    
-    private func startWiggle() {
-        let angle = 0.04
-        let wiggle = CAKeyframeAnimation(keyPath: "transform.rotation")
-        wiggle.values = [-angle, angle]
-        wiggle.autoreverses = true
-        wiggle.duration = 0.15
-        wiggle.repeatCount = .infinity
-        layer.add(wiggle, forKey: "wiggle")
-    }
-    
-    private func stopWiggle() {
-        layer.removeAnimation(forKey: "wiggle")
     }
 }
